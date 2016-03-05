@@ -45,10 +45,8 @@ public class JobLauncher {
 
         String jobStatus="255";
 
-
         Properties jobProperties = new Properties();
         //override params
-
         String jobName="ACER";
 
         jobOperator = new JsrJobOperator();
@@ -67,9 +65,8 @@ public class JobLauncher {
             jobStatus=jobOperator.getJobExecution(executionId).getExitStatus();
             long time = System.currentTimeMillis() - startTimestamp;
 
-            System.out.println("Done in "+time);
-           
-           // System.out.println("Job with id {} ended with status {}, return code {}, in {}  ",executionId, jobOperator.getJobExecution(executionId).getBatchStatus(), jobStatus, "");
+            System.out.println("Job with id "+executionId+" ended with status "+jobOperator.getJobExecution(executionId).getBatchStatus()+", "+
+                   " return code "+jobStatus+", in "+time +" milliseconds.");
         }
         catch(JobStartException e) {
             e.printStackTrace();

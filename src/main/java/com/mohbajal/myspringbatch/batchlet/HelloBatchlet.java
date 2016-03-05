@@ -10,7 +10,8 @@ public class HelloBatchlet implements Batchlet {
 
     @Override
     public String process() throws Exception {
-        System.out.println("process");
+        System.out.println("Processing..");
+
         return "OK";
     }
 

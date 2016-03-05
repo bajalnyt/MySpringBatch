@@ -17,9 +17,11 @@ dependencies {
             "org.springframework.batch:spring-batch-infrastructure:${spring_batch_version}",
             "org.springframework.batch:spring-batch-admin-manager:${spring_batch_admin_version}",
             'org.springframework:spring-jdbc:4.2.5.RELEASE',
+            'org.springframework:spring-test:4.2.5.RELEASE',
             'commons-io:commons-io:2.4+',
             'org.apache.commons:commons-exec:1.3',
             'org.springframework:spring-oxm:4.1.6.RELEASE',
             'hsqldb:hsqldb:1.8.0.10'
-
+    testCompile 'org.mockito:mockito-all:1.8.4',
+            'junit:junit:4.+'
 }
