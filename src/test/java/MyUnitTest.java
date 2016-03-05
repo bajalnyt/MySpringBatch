@@ -53,14 +53,9 @@ public class MyUnitTest {
 
     @Test
     public void testSetup(){
-        jsrJobOperator.start("HDADB2", new Properties());
+        jsrJobOperator.start("ACER", new Properties());
     }
 
-    /*@Test
-    public void testHello() {
-        String message = "Hello World!";
-        Assert.assertEquals(12, message.length());
-    }*/
 
 
 
