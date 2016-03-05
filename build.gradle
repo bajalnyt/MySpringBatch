@@ -1,0 +1,25 @@
+group 'com.mohbajal.myspringbatch'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+def spring_batch_version='3.0.6.RELEASE';
+def spring_batch_admin_version='1.3.1.RELEASE';
+
+dependencies {
+    compile "org.springframework.batch:spring-batch-core:${spring_batch_version}",
+            "org.springframework.batch:spring-batch-infrastructure:${spring_batch_version}",
+            "org.springframework.batch:spring-batch-admin-manager:${spring_batch_admin_version}",
+            'org.springframework:spring-jdbc:4.2.5.RELEASE',
+            'commons-io:commons-io:2.4+',
+            'org.apache.commons:commons-exec:1.3',
+            'org.springframework:spring-oxm:4.1.6.RELEASE',
+            'hsqldb:hsqldb:1.8.0.10'
+
+}
