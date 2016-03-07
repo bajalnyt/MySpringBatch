@@ -62,6 +62,7 @@ public class JobLauncher {
             //CatalogDbUtils.cleanCatalog();
 
             executionId = jobOperator.start(jobName,jobProperties);
+
             jobStatus=jobOperator.getJobExecution(executionId).getExitStatus();
             long time = System.currentTimeMillis() - startTimestamp;
 
