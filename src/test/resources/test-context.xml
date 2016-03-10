@@ -5,12 +5,13 @@
 		http://www.springframework.org/schema/batch/spring-batch.xsd">
 
     <bean id="TestJob" class="org.springframework.batch.core.job.SimpleJob">
-        <batch:job-repository/>
-        <batch:job id="ACER">
-            <batch:step id="step1">
-                <batchlet ref="HelloBatchlet"/>
-            </batch:step>
-        </batch:job>
+        <property name="jobRepository" ref="jobRepository"/>
+        <!--<batch:job-repository/>-->
+        <!--<batch:job id="ACER">-->
+            <!--<batch:step id="step1">-->
+                <!--<batchlet ref="HelloBatchlet"/>-->
+            <!--</batch:step>-->
+        <!--</batch:job>-->
     </bean>
 
 
@@ -26,15 +27,17 @@
 
     <import resource="database.xml" />
 
-    <bean id="jobOperator"
-          class="org.springframework.batch.core.launch.support.SimpleJobOperator"/>
-    <bean id="jobExplorer"
-          class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">
-    </bean>
+    <!--<bean id="jobOperator"-->
+          <!--class="org.springframework.batch.core.launch.support.SimpleJobOperator">-->
+        <!--<property name="jobLauncher" ref=""-->
+            <!--</bean>-->
+    <!--<bean id="jobExplorer"-->
+          <!--class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">-->
+    <!--</bean>-->
 
-    <bean id="jobRegistry"
-          class="org.springframework.batch.core.configuration.support.MapJobRegistry" >
-            </bean>
+    <!--<bean id="jobRegistry"-->
+          <!--class="org.springframework.batch.core.configuration.support.MapJobRegistry" >-->
+            <!--</bean>-->
 
     <bean id="jobRepository"
           class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
