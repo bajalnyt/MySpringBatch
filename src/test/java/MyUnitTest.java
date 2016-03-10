@@ -1,4 +1,5 @@
 import org.springframework.batch.core.*;
+import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.hsqldb.TransactionManager;
 import org.junit.Assert;
@@ -36,7 +37,9 @@ public class MyUnitTest {
 
     @Test
     public void testSetup() throws Exception {
+
         JobExecution jobExecution =  jobLauncherTestUtils.launchJob();
+
         Assert.assertEquals(jobExecution.getStatus(), BatchStatus.COMPLETED);
     }
 

@@ -1,22 +1,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-
-    <batch:job id="ACER">
-        <batch:step id="step1">
-            <batchlet ref="HelloBatchlet"/>
-        </batch:step>
-    </batch:job>
-
-    <bean class="org.springframework.batch.test.JobLauncherTestUtils">
-        <property name="job" ref="ACER"/>
+    <bean id="TestJob" class="org.springframework.batch.core.job.SimpleJob">
+        <batch:job-repository/>
+        <batch:job id="ACER">
+            <batch:step id="step1">
+                <batchlet ref="HelloBatchlet"/>
+            </batch:step>
+        </batch:job>
     </bean>
 
-    <bean id="transactionManager"
-          class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
 
+    <bean class="org.springframework.batch.test.JobLauncherTestUtils">
+        <property name="job" ref="TestJob" />
+    </bean>
 
     <bean id="jobLauncher"
           class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
@@ -33,7 +33,8 @@
     </bean>
 
     <bean id="jobRegistry"
-          class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+          class="org.springframework.batch.core.configuration.support.MapJobRegistry" >
+            </bean>
 
     <bean id="jobRepository"
           class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
@@ -43,6 +44,9 @@
     </bean>
 
     <!--
+    <bean id="transactionManager"
+          class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
+
    <bean class="org.springframework.batch.core.configuration.support.AutomaticJobRegistrar">
        <property name="applicationContextFactories">
            <bean class="org.springframework.batch.core.configuration.support.ClasspathXmlApplicationContextsFactoryBean">
