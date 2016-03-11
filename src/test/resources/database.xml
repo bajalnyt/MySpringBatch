@@ -15,6 +15,12 @@
         <property name="password" value="" />
     </bean>
 
+    <jdbc:initialize-database data-source="dataSource" enabled="true">
+        <!--<jdbc:script location="classpath:/sql/your_custom_test_schema.sql" />
+        <jdbc:script location="classpath:/sql/your_custom_test_data.sql" />-->
+        <jdbc:script location="classpath:/org/springframework/batch/core/schema-hsqldb.sql" />
+    </jdbc:initialize-database>
+
     <bean id="transactionManager"
           class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
 

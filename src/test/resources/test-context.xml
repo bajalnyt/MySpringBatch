@@ -1,22 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/batch
-		http://www.springframework.org/schema/batch/spring-batch.xsd">
+                              http://www.springframework.org/schema/beans/spring-beans.xsd
+                              http://xmlns.jcp.org/xml/ns/javaee
+                              http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd">
 
-    <bean id="TestJob" class="org.springframework.batch.core.job.SimpleJob">
+    <!--<bean id="TestJob" class="org.springframework.batch.core.job.SimpleJob">
         <property name="jobRepository" ref="jobRepository"/>
-        <!--<batch:job-repository/>-->
-        <!--<batch:job id="ACER">-->
-            <!--<batch:step id="step1">-->
-                <!--<batchlet ref="HelloBatchlet"/>-->
-            <!--</batch:step>-->
-        <!--</batch:job>-->
-    </bean>
+       &lt;!&ndash; <batch:job-repository/>
+        <batch:job id="ACER">
+            <batch:step id="step1">
+                <batchlet ref="HelloBatchlet"/>
+            </batch:step>
+        </batch:job>&ndash;&gt;
+    </bean>-->
+
+
+    <import resource="ACER.xml"/>
 
 
     <bean class="org.springframework.batch.test.JobLauncherTestUtils">
-        <property name="job" ref="TestJob" />
+        <property name="job" ref="fooJob" />
     </bean>
 
     <bean id="jobLauncher"
@@ -24,44 +29,18 @@
         <property name="jobRepository" ref="jobRepository" />
     </bean>
 
+    <bean id="jobExplorer" class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <import resource="database.xml" />
 
-    <!--<bean id="jobOperator"-->
-          <!--class="org.springframework.batch.core.launch.support.SimpleJobOperator">-->
-        <!--<property name="jobLauncher" ref=""-->
-            <!--</bean>-->
-    <!--<bean id="jobExplorer"-->
-          <!--class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">-->
-    <!--</bean>-->
-
-    <!--<bean id="jobRegistry"-->
-          <!--class="org.springframework.batch.core.configuration.support.MapJobRegistry" >-->
-            <!--</bean>-->
-
-    <bean id="jobRepository"
+   <bean id="jobRepository"
           class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
-        <property name="databaseType" value="mysql" />
+        <property name="databaseType" value="hsql" />
     </bean>
-
-    <!--
-    <bean id="transactionManager"
-          class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
-
-   <bean class="org.springframework.batch.core.configuration.support.AutomaticJobRegistrar">
-       <property name="applicationContextFactories">
-           <bean class="org.springframework.batch.core.configuration.support.ClasspathXmlApplicationContextsFactoryBean">
-               <property name="resources" value="classpath*:/META-INF/batch-jobs/*.xml" />
-           </bean>
-       </property>
-       <property name="jobLoader">
-           <bean class="org.springframework.batch.core.configuration.support.DefaultJobLoader">
-               <property name="jobRegistry" ref="jobRegistry" />
-           </bean>
-       </property>
-   </bean>-->
 
 
 </beans>

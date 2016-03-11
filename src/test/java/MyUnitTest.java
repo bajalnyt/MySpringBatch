@@ -32,7 +32,13 @@ public class MyUnitTest {
 
 
     @Autowired
+    private Job job_i;
+
+    @Autowired
     JobLauncherTestUtils jobLauncherTestUtils;
+
+    @Autowired
+    private JobLauncher jobLauncher_i;
 
 
     @Test
@@ -40,7 +46,15 @@ public class MyUnitTest {
 
         JobExecution jobExecution =  jobLauncherTestUtils.launchJob();
 
-        Assert.assertEquals(jobExecution.getStatus(), BatchStatus.COMPLETED);
+        Assert.assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
+
+    }
+
+    @Test
+    public void runJob() throws Exception {
+
+        JobExecution jobExecution = jobLauncher_i.run(job_i, new JobParametersBuilder().toJobParameters());
+        System.out.println(jobExecution.getExitStatus());
     }
 
 }
