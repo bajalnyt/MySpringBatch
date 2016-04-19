@@ -4,6 +4,7 @@ package com.mohbajal.myspringbatch;
  * Created by 908752 on 3/5/16.
  */
 
+import java.util.List;
 import java.util.Properties;
 
 import java.util.Properties;
@@ -11,21 +12,30 @@ import java.util.Properties;
 import javax.batch.operations.JobSecurityException;
 import javax.batch.operations.JobStartException;
 import javax.batch.runtime.BatchStatus;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.jsr.launch.JsrJobOperator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.stereotype.Component;
 
 
-
+@Component
 public class JobLauncher {
 
 
     private static boolean asyncTasks = false;
 
     private static JsrJobOperator jobOperator;
+
+    @Autowired
+    private static JobExplorer jobExplorer;
+
     static long executionId;
 
 
@@ -60,8 +70,13 @@ public class JobLauncher {
 
         try {
             //CatalogDbUtils.cleanCatalog();
+           /* List<JobInstance> instances = jobExplorer.getJobInstances("ACER", 0, 10);
+            System.out.println("Explorer Size : " + instances.size());*/
 
-            executionId = jobOperator.start(jobName,jobProperties);
+            //executionId = jobOperator.start(jobName,jobProperties);
+
+            jobOperator.restart(1, jobProperties);
+
 
             jobStatus=jobOperator.getJobExecution(executionId).getExitStatus();
             long time = System.currentTimeMillis() - startTimestamp;

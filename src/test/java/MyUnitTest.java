@@ -1,27 +1,16 @@
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.job.SimpleJob;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.hsqldb.TransactionManager;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.batch.core.converter.JobParametersConverter;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.jsr.launch.JsrJobOperator;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.batch.core.scope.context.JobContext;
-import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
+import org.junit.runner.RunWith;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.junit.runner.RunWith;
-import org.springframework.transaction.PlatformTransactionManager;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,6 +29,8 @@ public class MyUnitTest {
     @Autowired
     private JobLauncher jobLauncher_i;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     public void testSetup() throws Exception {
@@ -48,8 +39,12 @@ public class MyUnitTest {
 
         Assert.assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
+        int count = jdbcTemplate.queryForList("select * from account").size();
+        Assert.assertEquals(1, count);
+
     }
 
+    // Another way to run the job
     @Test
     public void runJob() throws Exception {
 

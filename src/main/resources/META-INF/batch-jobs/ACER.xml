@@ -6,7 +6,26 @@
 	 version="1.0">
 
 	<step id="step1">
+		<properties>
+			<property name="STEP_NAME" value="step1"/>
+		</properties>
 		<batchlet ref="HelloBatchlet"/>
+		<next on="*" to="step2"/>
 	</step>
 
+	<step id="step2">
+		<properties>
+			<property name="STEP_NAME" value="step2"/>
+		</properties>
+		<fail on="FAILED" exit-status="255"/>
+		<batchlet ref="HelloBatchlet"/>
+		<next on="*" to="step3"/>
+	</step>
+
+	<step id="step3">
+		<properties>
+			<property name="STEP_NAME" value="step3"/>
+		</properties>
+		<batchlet ref="HelloBatchlet"/>
+	</step>
 </job>
