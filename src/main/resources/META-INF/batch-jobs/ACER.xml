@@ -17,8 +17,9 @@
 		<properties>
 			<property name="STEP_NAME" value="step2"/>
 		</properties>
-		<fail on="FAILED" exit-status="255"/>
 		<batchlet ref="HelloBatchlet"/>
+		
+		<fail on="FAILED" exit-status="255"/>
 		<next on="*" to="step3"/>
 	</step>
 

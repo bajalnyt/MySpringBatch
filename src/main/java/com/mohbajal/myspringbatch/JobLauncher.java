@@ -16,16 +16,19 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.jsr.launch.JsrJobOperator;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
-
-@Component
 public class JobLauncher {
 
 
@@ -33,7 +36,6 @@ public class JobLauncher {
 
     private static JsrJobOperator jobOperator;
 
-    @Autowired
     private static JobExplorer jobExplorer;
 
     static long executionId;
@@ -60,6 +62,7 @@ public class JobLauncher {
         String jobName="ACER";
 
         jobOperator = new JsrJobOperator();
+
         if (!asyncTasks){
             jobOperator.setTaskExecutor(new SyncTaskExecutor());
         }
@@ -67,16 +70,36 @@ public class JobLauncher {
             jobOperator.setTaskExecutor(new SimpleAsyncTaskExecutor());
         }
 
+        String[] configLocation  =
+                {
+                        "META-INF/batch.xml"
+                };
+        ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
 
         try {
             //CatalogDbUtils.cleanCatalog();
-           /* List<JobInstance> instances = jobExplorer.getJobInstances("ACER", 0, 10);
-            System.out.println("Explorer Size : " + instances.size());*/
+            jobExplorer = (JobExplorer) context.getBean("jobExplorer");
+            List<JobInstance> instances = jobExplorer.getJobInstances("ACER", 0, 10);
+            System.out.println("Explorer Size : " + instances.size());
 
-            //executionId = jobOperator.start(jobName,jobProperties);
+            if(!instances.isEmpty()) {
+                    List<JobExecution> executions = jobExplorer.getJobExecutions(instances.get(0));
+                    System.out.println("Executions size : " + executions.size());
 
-            jobOperator.restart(1, jobProperties);
+                    if(executions.size() > 0) {
+                        //Latest execution
+                        long maxExecutionId= getMaxExecutionId(executions);
 
+                        JobExecution jobExecution = executions.get(((int) maxExecutionId) -1 );
+
+                        if(jobExecution.getStatus().name().equals("FAILED")) {
+                            long a= jobOperator.restart(maxExecutionId, jobProperties);
+                        }
+                    }
+            } else {
+                System.out.println("Job has not been run before");
+                executionId = jobOperator.start(jobName,jobProperties);
+            }
 
             jobStatus=jobOperator.getJobExecution(executionId).getExitStatus();
             long time = System.currentTimeMillis() - startTimestamp;
@@ -96,6 +119,15 @@ public class JobLauncher {
 
         }
         return jobStatus;
+    }
+
+    private static long getMaxExecutionId(List<JobExecution> executions) {
+        long maxExecutionId=0;
+        for(JobExecution execution: executions){
+            if(execution.getId() > maxExecutionId)
+                maxExecutionId = execution.getId();
+        }
+        return maxExecutionId;
     }
 
     public static boolean isStillRunning() {
@@ -122,4 +154,14 @@ public class JobLauncher {
     public static JsrJobOperator getJobOperator() {
         return jobOperator;
     }
+
+    public static JobExplorer getJobExplorer() {
+        return jobExplorer;
+    }
+
+    public void setJobExplorer(JobExplorer jobExplorer) {
+        this.jobExplorer = jobExplorer;
+    }
+
+
 }
