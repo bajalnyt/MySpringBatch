@@ -64,7 +64,7 @@ public class HelloBatchlet extends AbstractBatchlet {
         template.execute(new RetryCallback<Boolean, RuntimeException>() {
 
             public Boolean doWithRetry(RetryContext context) {
-                return invokeRemoteMethod();
+                return invokeRemoteMethod(stepName);
             }
 
         });
@@ -72,11 +72,13 @@ public class HelloBatchlet extends AbstractBatchlet {
     }
 
     @Retryable(maxAttempts=10,value=RuntimeException.class,backoff = @Backoff(delay = 10000,multiplier=2))
-    private Boolean invokeRemoteMethod() {
+    private Boolean invokeRemoteMethod(String stepName) {
         System.out.println("Calculating - Attempt " + attempts + " at " + sdf.format(new Date()));
         attempts++;
 
-        throw new RuntimeException("Something bad happened ");
+        if(stepName.equalsIgnoreCase("step2"))
+            throw new RuntimeException("Something bad happened ");
+        return true;
 
     }
 

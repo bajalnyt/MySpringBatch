@@ -31,7 +31,7 @@
     </bean>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521/xe" />
+        <property name="url" value="jdbc:oracle:thin:@localhost:1522/orcl12c" />
         <property name="username" value="aristo_owner" />
         <property name="password" value="ardvo1" />
     </bean>
@@ -50,6 +50,7 @@
     </bean>
     <batch-artifacts xmlns="http://xmlns.jcp.org/xml/ns/javaee">
         <ref id="HelloBatchlet" class="com.mohbajal.myspringbatch.batchlet.HelloBatchlet"/>
+        <ref id="TestBatchlet" class="com.mohbajal.myspringbatch.batchlet.TestBatchlet"/>
     </batch-artifacts>
 
 

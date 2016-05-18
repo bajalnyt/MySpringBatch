@@ -36,7 +36,8 @@ public class JobLauncher {
 
     private static JsrJobOperator jobOperator;
 
-    private static JobExplorer jobExplorer;
+    @Autowired
+    static JobExplorer jobExplorer;
 
     static long executionId;
 
@@ -58,8 +59,7 @@ public class JobLauncher {
         String jobStatus="255";
 
         Properties jobProperties = new Properties();
-        //override params
-        String jobName="ACER";
+        String jobName="ACER2";
 
         jobOperator = new JsrJobOperator();
 
@@ -70,32 +70,30 @@ public class JobLauncher {
             jobOperator.setTaskExecutor(new SimpleAsyncTaskExecutor());
         }
 
-        String[] configLocation  =
-                {
-                        "META-INF/batch.xml"
-                };
+        String[] configLocation  = { "META-INF/batch.xml" };
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
 
         try {
             //CatalogDbUtils.cleanCatalog();
             jobExplorer = (JobExplorer) context.getBean("jobExplorer");
-            List<JobInstance> instances = jobExplorer.getJobInstances("ACER", 0, 10);
+            System.out.println("Available jobs :"+jobOperator.getJobNames());
+
+            List<JobInstance> instances = jobExplorer.getJobInstances(jobName, 0, 100);
             System.out.println("Explorer Size : " + instances.size());
 
             if(!instances.isEmpty()) {
-                    List<JobExecution> executions = jobExplorer.getJobExecutions(instances.get(0));
-                    System.out.println("Executions size : " + executions.size());
+                List<JobExecution> executions = jobExplorer.getJobExecutions(instances.get(0));
+                System.out.println("Executions size : " + executions.size());
 
-                    if(executions.size() > 0) {
-                        //Latest execution
-                        long maxExecutionId= getMaxExecutionId(executions);
-
-                        JobExecution jobExecution = executions.get(((int) maxExecutionId) -1 );
-
-                        if(jobExecution.getStatus().name().equals("FAILED")) {
-                            long a= jobOperator.restart(maxExecutionId, jobProperties);
-                        }
+                if(executions.size() > 0) {
+                    //Latest execution
+                    JobExecution jobExecution = executions.get(0);
+                    executionId = executions.get(0).getId();
+                    System.out.println("Restarting job with ID :" + executionId);
+                    if(jobExecution.getStatus().name().equals("FAILED")) {
+                        long a= jobOperator.restart(executionId , jobProperties);
                     }
+                }
             } else {
                 System.out.println("Job has not been run before");
                 executionId = jobOperator.start(jobName,jobProperties);
@@ -121,13 +119,14 @@ public class JobLauncher {
         return jobStatus;
     }
 
-    private static long getMaxExecutionId(List<JobExecution> executions) {
-        long maxExecutionId=0;
+    private static long getlastExecutionId(List<JobExecution> executions) {
+        long lastExecutionId=0;
         for(JobExecution execution: executions){
-            if(execution.getId() > maxExecutionId)
-                maxExecutionId = execution.getId();
+            System.out.println(execution.getJobId());
+            if(execution.getJobId() > lastExecutionId)
+                lastExecutionId = execution.getJobId();
         }
-        return maxExecutionId;
+        return lastExecutionId-1;
     }
 
     public static boolean isStillRunning() {
@@ -153,14 +152,6 @@ public class JobLauncher {
 
     public static JsrJobOperator getJobOperator() {
         return jobOperator;
-    }
-
-    public static JobExplorer getJobExplorer() {
-        return jobExplorer;
-    }
-
-    public void setJobExplorer(JobExplorer jobExplorer) {
-        this.jobExplorer = jobExplorer;
     }
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<job id="ACER" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+<job id="ACER2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
      http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd"
@@ -9,7 +9,8 @@
 		<properties>
 			<property name="STEP_NAME" value="step1"/>
 		</properties>
-		<batchlet ref="HelloBatchlet"/>
+		<batchlet ref="TestBatchlet"/>
+		<fail on="ABEND" exit-status="255"/>
 		<next on="*" to="step2"/>
 	</step>
 
@@ -17,9 +18,8 @@
 		<properties>
 			<property name="STEP_NAME" value="step2"/>
 		</properties>
-		<batchlet ref="HelloBatchlet"/>
-		
-		<fail on="FAILED" exit-status="255"/>
+		<batchlet ref="TestBatchlet"/>
+		<fail on="ABEND" exit-status="255"/>
 		<next on="*" to="step3"/>
 	</step>
 
@@ -27,6 +27,28 @@
 		<properties>
 			<property name="STEP_NAME" value="step3"/>
 		</properties>
-		<batchlet ref="HelloBatchlet"/>
+		<batchlet ref="TestBatchlet"/>
+		<fail on="ABEND" exit-status="255"/>
+		<next on="*" to="step4"/>
 	</step>
+
+	<step id="step4">
+		<properties>
+			<property name="STEP_NAME" value="step4"/>
+		</properties>
+		<batchlet ref="TestBatchlet"/>
+		<fail on="ABEND" exit-status="255"/>
+		<next on="*" to="step5"/>
+	</step>
+
+
+	<step id="step5">
+		<properties>
+			<property name="STEP_NAME" value="step5"/>
+		</properties>
+		<batchlet ref="TestBatchlet"/>
+		<fail on="ABEND" exit-status="255"/>
+	</step>
+
+
 </job>
