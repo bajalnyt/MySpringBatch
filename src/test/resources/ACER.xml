@@ -5,7 +5,7 @@
                               http://www.springframework.org/schema/beans/spring-beans.xsd
                               http://xmlns.jcp.org/xml/ns/javaee
                               http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd">
-	<job id="acerJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
+	<job id="acerJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0" restartable="">
 	<step id="step1">
 		<batchlet ref="HelloBatchlet"/>
 	</step>

@@ -28,6 +28,7 @@
         <property name="databaseType" value="ORACLE"/>
         <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
+        <property name="isolationLevelForCreate" value="ISOLATION_READ_UNCOMMITTED"/>
     </bean>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />

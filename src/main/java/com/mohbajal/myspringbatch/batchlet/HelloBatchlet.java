@@ -71,13 +71,16 @@ public class HelloBatchlet extends AbstractBatchlet {
         return "OK";
     }
 
+
     @Retryable(maxAttempts=10,value=RuntimeException.class,backoff = @Backoff(delay = 10000,multiplier=2))
     private Boolean invokeRemoteMethod(String stepName) {
-        System.out.println("Calculating - Attempt " + attempts + " at " + sdf.format(new Date()));
+        System.out.println("Running - Attempt " + attempts + " at " + sdf.format(new Date()));
         attempts++;
 
-        if(stepName.equalsIgnoreCase("step2"))
-            throw new RuntimeException("Something bad happened ");
+        if(stepName.equalsIgnoreCase("step2")) {
+            System.out.println("Step2 failed");
+            throw new RuntimeException("Some failure happened ");
+        }
         return true;
 
     }

@@ -94,11 +94,11 @@ public class JobLauncher {
                         long a= jobOperator.restart(executionId , jobProperties);
                     }
                 }
-            } else {
-                System.out.println("Job has not been run before");
-                executionId = jobOperator.start(jobName,jobProperties);
+                 else {
+                    System.out.println("Job has not been run before");
+                    executionId = jobOperator.start(jobName,jobProperties);
+                }
             }
-
             jobStatus=jobOperator.getJobExecution(executionId).getExitStatus();
             long time = System.currentTimeMillis() - startTimestamp;
 
